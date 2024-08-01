@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NUH UHH</title>
+    <title>NUH UH</title>
     <style>
         body {
             display: flex;
@@ -52,7 +52,7 @@
         <button class="button" onclick="submitPassword()">Submit</button>
     </div>
     <script>
-        const masterPassword = 'lrizz';
+        const masterPassword = 'lrip';
 
         // Generate and store the daily temporary password
         function generateDailyPassword() {
@@ -63,7 +63,7 @@
                 const tempPassword = generateRandomPassword(5);
                 localStorage.setItem('tempPassword', tempPassword);
                 localStorage.setItem('tempPasswordDate', today);
-                console.log('Generated new temporary password:', tempPassword);
+                console.log('Generated new temporary password.');
             } else {
                 console.log('Using existing temporary password.');
             }
@@ -82,11 +82,9 @@
             const enteredPassword = document.getElementById('passwordInput').value.trim().toLowerCase();
             const tempPassword = localStorage.getItem('tempPassword');
             console.log('Entered password:', enteredPassword);
-            console.log('Stored master password:', masterPassword);
-            console.log('Stored temporary password:', tempPassword);
 
             if (enteredPassword === masterPassword || enteredPassword === tempPassword) {
-                window.location.href = 'slope.html';
+                window.location.href = '12io3ek.html';
             } else {
                 alert('Incorrect password');
             }
@@ -96,8 +94,9 @@
         generateDailyPassword();
 
         // Expose the function to the console for manual retrieval
-        window.getDailyPassword = function() {
-            return localStorage.getItem('tempPassword');
+        window.showPasswords = function() {
+            console.log('Master Password:', masterPassword);
+            console.log('Temporary Password:', localStorage.getItem('tempPassword'));
         };
     </script>
 </body>
