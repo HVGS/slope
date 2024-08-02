@@ -54,26 +54,22 @@
     <script>
         const masterPassword = 'lrip';
 
-        // Generate and store the daily temporary password
+        // Generate the daily temporary password based on the current date
         function generateDailyPassword() {
             const today = new Date().toDateString();
-            const storedDate = localStorage.getItem('tempPasswordDate');
-            
-            if (storedDate !== today) {
-                const tempPassword = generateRandomPassword(5);
-                localStorage.setItem('tempPassword', tempPassword);
-                localStorage.setItem('tempPasswordDate', today);
-                console.log('Generated new temporary password.');
-            } else {
-                console.log('Using existing temporary password.');
-            }
+            const tempPassword = generateRandomPasswordFromSeed(today, 5);
+            localStorage.setItem('tempPassword', tempPassword);
+            console.log('Generated daily temporary password.');
         }
 
-        function generateRandomPassword(length) {
+        // Seed-based random password generation
+        function generateRandomPasswordFromSeed(seed, length) {
             const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
             let password = '';
+            let seedNum = seed.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
             for (let i = 0; i < length; i++) {
-                password += characters.charAt(Math.floor(Math.random() * characters.length));
+                password += characters.charAt((seedNum + i) % characters.length);
+                seedNum = (seedNum * (i + 1)) % 1000000;
             }
             return password;
         }
