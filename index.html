@@ -57,9 +57,12 @@
         // Generate the daily temporary password based on the current date
         function generateDailyPassword() {
             const today = new Date().toDateString();
-            const tempPassword = generateRandomPasswordFromSeed(today, 5);
-            localStorage.setItem('tempPassword', tempPassword);
-            console.log('Generated daily temporary password.');
+            let tempPassword = getCookie(today);
+            if (!tempPassword) {
+                tempPassword = generateRandomPasswordFromSeed(today, 5);
+                setCookie(today, tempPassword, 1);
+            }
+            return tempPassword;
         }
 
         // Seed-based random password generation
@@ -74,9 +77,31 @@
             return password;
         }
 
+        // Function to set a cookie
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + d.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        // Function to get a cookie
+        function getCookie(name) {
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const ca = decodedCookie.split(';');
+            const cookieName = name + "=";
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i].trim();
+                if (c.indexOf(cookieName) === 0) {
+                    return c.substring(cookieName.length, c.length);
+                }
+            }
+            return "";
+        }
+
         function submitPassword() {
             const enteredPassword = document.getElementById('passwordInput').value.trim().toLowerCase();
-            const tempPassword = localStorage.getItem('tempPassword');
+            const tempPassword = generateDailyPassword();
             console.log('Entered password:', enteredPassword);
 
             if (enteredPassword === masterPassword || enteredPassword === tempPassword.toLowerCase()) {
@@ -85,9 +110,6 @@
                 alert('Incorrect password');
             }
         }
-
-        // Generate the daily password when the page loads
-        generateDailyPassword();
 
         // Function to generate a unique identifier
         function generateUUID() {
@@ -118,7 +140,7 @@
         // Expose the function to the console for manual retrieval
         window.showPasswords = function() {
             console.log('Master Password:', masterPassword);
-            console.log('Temporary Password:', localStorage.getItem('tempPassword'));
+            console.log('Temporary Password:', generateDailyPassword());
         };
 
         window.showNames = function() {
