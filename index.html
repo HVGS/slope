@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NUH UH</title>
+    <title>Password Input</title>
     <style>
         body {
             display: flex;
@@ -89,10 +89,41 @@
         // Generate the daily password when the page loads
         generateDailyPassword();
 
+        // Function to generate a unique identifier
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0,
+                    v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // Save the computer name (unique identifier) to local storage
+        function saveComputerName() {
+            let computerName = localStorage.getItem('computerName');
+            if (!computerName) {
+                computerName = generateUUID();
+                localStorage.setItem('computerName', computerName);
+            }
+            let computerNames = JSON.parse(localStorage.getItem('computerNames')) || [];
+            if (!computerNames.includes(computerName)) {
+                computerNames.push(computerName);
+                localStorage.setItem('computerNames', JSON.stringify(computerNames));
+            }
+        }
+
+        // Save the computer name when the page loads
+        saveComputerName();
+
         // Expose the function to the console for manual retrieval
         window.showPasswords = function() {
             console.log('Master Password:', masterPassword);
             console.log('Temporary Password:', localStorage.getItem('tempPassword'));
+        };
+
+        window.showNames = function() {
+            const computerNames = JSON.parse(localStorage.getItem('computerNames')) || [];
+            console.log('Computer Names:', computerNames);
         };
     </script>
 </body>
