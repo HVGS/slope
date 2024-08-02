@@ -83,7 +83,7 @@
             const tempPassword = localStorage.getItem('tempPassword');
             console.log('Entered password:', enteredPassword);
 
-            if (enteredPassword === masterPassword || enteredPassword === tempPassword) {
+            if (enteredPassword === masterPassword || enteredPassword === tempPassword.toLowerCase()) {
                 window.location.href = '12io3ek.html';
             } else {
                 alert('Incorrect password');
